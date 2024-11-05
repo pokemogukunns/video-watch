@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invidious JSON Viewer</title>
+</head>
+<body>
+    <h1>Invidious API データ表示</h1>
+    <label for="videoID">Video IDを入力してください:</label>
+    <input type="text" id="videoID" placeholder="Video ID">
+    <button id="fetchData">データ取得</button>
+    <pre id="output"></pre>
+
+    <script>
+        document.getElementById('fetchData').addEventListener('click', async () => {
+            const videoID = document.getElementById('videoID').value.trim();  // ユーザーの入力を取得
+            if (!videoID) {
+                document.getElementById('output').textContent = "Video IDを入力してください。";
+                return;
+            }
+
+            const apiUrl = `https://invidious.example.com/api/v1/videos/${videoID}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+                const data = await response.json();
+                document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('output').textContent = `エラーが発生しました: ${error}`;
+            }
+        });
+    </script>
+</body>
+</html>
